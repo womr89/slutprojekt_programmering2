@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,7 +22,18 @@ namespace slutprojekt_programmering2
         SpriteBatch _spriteBatch;
         private Player _player;
         private List<Enemy> _enemies = new List<Enemy>();
-        private List<Ally> _allies = new List<Ally>(); 
+        private List<Ally> _allies = new List<Ally>();
+        // List of avalible spawn positions
+        private List<Vector2> _allySpawnPos = new List<Vector2>(new Vector2[]
+        {
+            new Vector2(695, 225), new Vector2(950, 225),
+            new Vector2(695, 470), new Vector2(950, 470),
+            new Vector2(695, 710), new Vector2(950, 710),
+            new Vector2(695, 950), new Vector2(950, 950)
+        });
+        private Random _randomSpawn = new Random((int)DateTime.Now.Ticks);
+        private int _randomSelect;
+
         
         private Background _background;
 
@@ -36,6 +48,25 @@ namespace slutprojekt_programmering2
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             
+        }
+
+        /// <summary>
+        /// Random Start spawn position method
+        /// </summary>
+        /// <returns>retruns avalible start position</returns>
+        private int RandomStartSpawn()
+        {
+            
+            int spawn = _randomSpawn.Next(_allySpawnPos.Count);
+
+            return spawn;
+        }
+        /// <summary>
+        /// Removes taken position from list
+        /// </summary>
+        private void RemoveSpawn()
+        {
+                _allySpawnPos.RemoveAt(_randomSelect);
         }
 
         /// <summary>
@@ -55,23 +86,18 @@ namespace slutprojekt_programmering2
             graphics.PreferredBackBufferHeight = (int)_viewWindow.Y;
             graphics.PreferredBackBufferWidth = (int)_viewWindow.X;
             graphics.ApplyChanges();
+
             
-            // Using preferredbackbufferheight and width for origin in draw
-            // player _viewWindow is used to set viewWindow
-            //_player = new Player(new Vector2(_viewWindow.X / 2, _viewWindow.Y / 2));
-            //_enemy = new Enemy(new Vector2(_viewWindow.X, _viewWindow.Y));
+            for (int i = 0; i < 8; i++)
+            {
+                // Gets a random number
+                _randomSelect = RandomStartSpawn();
+                // Adds a new Ally with a start position vector2 random number in list
+                _allies.Add(new Ally(_allySpawnPos[_randomSelect]));
+                // Removes the used position
+                RemoveSpawn();
+            }
             
-            // X = 950 == 4th lane
-            _allies.Add( new Ally(new Vector2(950, 225)));
-            _allies.Add( new Ally(new Vector2(950, 470)));
-            _allies.Add(new Ally(new Vector2(950, 710)));
-            _allies.Add(new Ally(new Vector2(950, 950)));
-
-            _allies.Add(new Ally(new Vector2(695, 225)));
-
-            _allies.Add(new Ally(new Vector2(440, 225)));
-
-            _allies.Add(new Ally(new Vector2(180, 225)));
 
             _background = new Background();
             
@@ -109,12 +135,6 @@ namespace slutprojekt_programmering2
             // TODO: Unload any non ContentManager content here
         }
 
-        private void AddCars()
-        {
-           
-
-        }
-
         
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -132,9 +152,11 @@ namespace slutprojekt_programmering2
             //_ally.Update(gameTime);
             
             _background.Update();
-            
 
             
+            
+
+
 
             base.Update(gameTime);
         }

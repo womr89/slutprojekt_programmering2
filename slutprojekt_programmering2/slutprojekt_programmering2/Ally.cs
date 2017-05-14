@@ -16,7 +16,7 @@ namespace slutprojekt_programmering2
             //this.ViewWindow = SpawnPosition;
             //SpawnPosition = viewWindow;
         }
-        
+
         public override void LoadContent(ContentManager content)
         {
             base.LoadContent(content);

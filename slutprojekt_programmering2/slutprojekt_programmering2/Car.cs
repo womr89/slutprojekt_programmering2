@@ -53,9 +53,8 @@ namespace slutprojekt_programmering2
             Position = viewWindow;
 
             color = (CarColor)random.Next(0, 5);
-            
-
         }
+
         /// <summary>
         /// Loads texture with random car-color. $"_car{color}" is instead of typing: "_carBlue, _carGreen, ... ect".
         /// color is fetched random from CarColor method.
