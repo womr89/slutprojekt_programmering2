@@ -35,13 +35,11 @@ namespace slutprojekt_programmering2
         protected Vector2 ViewWindow;
         protected Vector2 SpawnPosition;
         protected float Rotation;
+        protected Colision Colision;
 
-        // Random color
-        protected readonly CarColor color;
+        // Random Color
+        protected readonly CarColor Color;
         protected static Random random = new Random((int)DateTime.Now.Ticks);
-
-        // Spawn Position-list
-        List<Vector2> _avalibleSpawnPositions = new List<Vector2>();
 
         /// <summary>
         /// Car constructor
@@ -52,17 +50,21 @@ namespace slutprojekt_programmering2
             this.ViewWindow = viewWindow;
             Position = viewWindow;
 
-            color = (CarColor)random.Next(0, 5);
+            Color = (CarColor)random.Next(0, 5);
         }
 
+        protected virtual void Initialize()
+        {
+            Colision = new Colision();
+        }
         /// <summary>
-        /// Loads texture with random car-color. $"_car{color}" is instead of typing: "_carBlue, _carGreen, ... ect".
-        /// color is fetched random from CarColor method.
+        /// Loads texture with random car-Color. $"_car{Color}" is instead of typing: "_carBlue, _carGreen, ... ect".
+        /// Color is fetched random from CarColor method.
         /// </summary>
         /// <param name="content">Used to load content</param>
         public virtual void LoadContent(ContentManager content)
         {
-            Texture = content.Load<Texture2D>($"_car{color}");
+            Texture = content.Load<Texture2D>($"_car{Color}");
         }
 
         public virtual void Update(GameTime gameTime)
@@ -79,7 +81,7 @@ namespace slutprojekt_programmering2
                Texture
                , new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height)
                , null
-               , Color.White
+               , Microsoft.Xna.Framework.Color.White
                , Rotation                            // Rotation
                , SpawnPosition                       // Start Position
                , SpriteEffects.None

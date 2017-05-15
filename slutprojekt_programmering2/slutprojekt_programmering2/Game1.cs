@@ -87,8 +87,8 @@ namespace slutprojekt_programmering2
             graphics.PreferredBackBufferWidth = (int)_viewWindow.X;
             graphics.ApplyChanges();
 
-            
-            for (int i = 0; i < 8; i++)
+            _player = new Player(new Vector2(695, 470));
+            for (int i = 0; i < 4; i++)
             {
                 // Gets a random number
                 _randomSelect = RandomStartSpawn();
@@ -115,7 +115,7 @@ namespace slutprojekt_programmering2
 
             // Load images
             _background.LoadContent(Content);
-            //_player.LoadContent(Content);
+            _player.LoadContent(Content);
             //_enemy.LoadContent(Content);
 
             foreach (var car in _allies)
@@ -147,10 +147,13 @@ namespace slutprojekt_programmering2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            //_player.Update(gameTime);
+            _player.Update(gameTime);
             //_enemy.Update(gameTime);
-            //_ally.Update(gameTime);
-            
+            foreach (var car in _allies)
+            {
+                car.Update(gameTime);
+            }
+
             _background.Update();
 
             
@@ -171,7 +174,7 @@ namespace slutprojekt_programmering2
             // Background
             _background.Draw(_spriteBatch, _viewWindow);
             // Player
-            //_player.Draw(_spriteBatch);
+            _player.Draw(_spriteBatch);
             // Enemy
             //_enemy.Draw(_spriteBatch);
             // Ally

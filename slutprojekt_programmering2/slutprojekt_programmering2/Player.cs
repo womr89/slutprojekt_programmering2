@@ -22,7 +22,7 @@ namespace slutprojekt_programmering2
 
         public override void LoadContent(ContentManager content)
         {
-            base.LoadContent(content);
+            Texture = content.Load<Texture2D>("_carWhite");
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace slutprojekt_programmering2
         public override void Update(GameTime gameTime)
         {
             // Start Position               // Texture / 4 to get the car in center.
-            ViewWindow.Y = ViewWindow.Y / 2 + Texture.Height / 4;
-            ViewWindow.X = ViewWindow.X / 2 + Texture.Width / 4;
-            SpawnPosition = ViewWindow;
+            //ViewWindow.Y = ViewWindow.Y / 2 + Texture.Height / 4;
+            //ViewWindow.X = ViewWindow.X / 2 + Texture.Width / 4;
+            //SpawnPosition = ViewWindow;
 
             State = Keyboard.GetState();
             // Keyboard input

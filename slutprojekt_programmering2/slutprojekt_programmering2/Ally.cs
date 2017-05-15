@@ -12,9 +12,7 @@ namespace slutprojekt_programmering2
     {
         public Ally(Vector2 viewWindow) : base(viewWindow)
         {
-            // Changed
-            //this.ViewWindow = SpawnPosition;
-            //SpawnPosition = viewWindow;
+            
         }
 
         public override void LoadContent(ContentManager content)
@@ -24,7 +22,7 @@ namespace slutprojekt_programmering2
 
         public override void Update(GameTime gameTime)
         {
-            //Position.Y += (float)0.5;
+            Position.Y += (float)0.5;
 
         }
 
