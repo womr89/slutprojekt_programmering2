@@ -10,7 +10,6 @@ namespace slutprojekt_programmering2
     class Collision
     {
         
-
         public Collision(Rectangle carRectangle)
         {
             

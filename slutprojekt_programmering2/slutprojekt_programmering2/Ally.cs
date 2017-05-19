@@ -22,7 +22,7 @@ namespace slutprojekt_programmering2
 
         public override void Update(GameTime gameTime)
         {
-            Position.Y += (float)0.5;
+            Position.Y += 5;
 
         }
 

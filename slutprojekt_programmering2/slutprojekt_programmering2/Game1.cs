@@ -25,10 +25,11 @@ namespace slutprojekt_programmering2
         private float _enemySpawnTimer;
         private int _randomNumber;
         private List<Ally> _allies = new List<Ally>();
+        private float _allySpawnTimer;
         private List<Car> _allCars = new List<Car>();
 
         // List of avalible spawn positions
-        private readonly List<Vector2> _allySpawnPos = new List<Vector2>(new Vector2[]
+        private readonly List<Vector2> _allyStartSpawnPos = new List<Vector2>(new Vector2[]
         {
             new Vector2(695, 225), new Vector2(950, 225),
             new Vector2(695, 470), new Vector2(950, 470),
@@ -37,10 +38,15 @@ namespace slutprojekt_programmering2
         });
         private readonly List<Vector2> _enemySpawnPos = new List<Vector2>(new Vector2[]
         {
-            new Vector2(180, 0),
-            new Vector2(440, 0)
+            new Vector2(55, -225),
+            new Vector2(305, -225)
         }); 
-        private readonly Random _randomSpawn = new Random((int)DateTime.Now.Ticks);
+        private readonly List<Vector2> _allySpawnPos = new List<Vector2>(new Vector2[]
+        {
+            new Vector2(695, -225),
+            new Vector2(950, -225)
+        }); 
+        private readonly Random _randomSpawn = new Random(/*(int)DateTime.Now.Ticks*/);
         private int _randomSelect;
         
         private Background _background;
@@ -65,7 +71,7 @@ namespace slutprojekt_programmering2
         private int AllyRandomStartSpawn()
         {
             
-            int spawn = _randomSpawn.Next(_allySpawnPos.Count);
+            int spawn = _randomSpawn.Next(_allyStartSpawnPos.Count);
 
             return spawn;
         }
@@ -74,7 +80,7 @@ namespace slutprojekt_programmering2
         /// </summary>
         private void AllyRemoveSpawn()
         {
-                _allySpawnPos.RemoveAt(_randomSelect);
+                _allyStartSpawnPos.RemoveAt(_randomSelect);
         }
 
         /// <summary>
@@ -94,22 +100,29 @@ namespace slutprojekt_programmering2
             graphics.PreferredBackBufferHeight = (int)_viewWindow.Y;
             graphics.PreferredBackBufferWidth = (int)_viewWindow.X;
             graphics.ApplyChanges();
-
-            _player = new Player(new Vector2(180, 0));
+            // New player
+            _player = new Player(new Vector2(400, 450));
+            // Add new Allies to list
+            
+            /*
             for (int i = 0; i < 4; i++)
             {
                 // Gets a random number
                 _randomSelect = AllyRandomStartSpawn();
                 // Adds a new Ally with a start position vector2 random number in list
-                _allies.Add(new Ally(_allySpawnPos[_randomSelect]));
+                _allies.Add(new Ally(_allyStartSpawnPos[_randomSelect]));
                 // Removes the used position
                 AllyRemoveSpawn();
             }
-            _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count - 1);
-            _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
-            
-            
+            */
 
+            // Add new enemy in list
+            _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count);
+            _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
+
+            // Add new allie in list
+            _randomNumber = _randomSpawn.Next(_allySpawnPos.Count);
+            _allies.Add(new Ally(_allySpawnPos[_randomNumber]));
 
             foreach (Ally ally in _allies)
             {
@@ -174,32 +187,39 @@ namespace slutprojekt_programmering2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            _player.Update(gameTime);
-            //_enemy.Update(gameTime);
+            // add new enemy on random position every x milliseconds
+            _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count);
+            _enemySpawnTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (_enemySpawnTimer > 750)
+            {
+                _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
+                _enemies.Last().LoadContent(Content);
+                _enemySpawnTimer -= 750;
+            }
+            // Add new allie on random position every x milliseconds
+            _allySpawnTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            _randomNumber = _randomSpawn.Next(_allySpawnPos.Count);
+            if (_allySpawnTimer > 1000)
+            {
+                _allies.Add(new Ally(_allySpawnPos[_randomNumber]));
+                _allies.Last().LoadContent(Content);
+                _allySpawnTimer -= 1000;
+            }
+
+            // update allies
             foreach (var car in _allies)
             {
                 car.Update(gameTime);
             }
+            // update enemies
             foreach (var car in _enemies)
             {
                 car.Update(gameTime);
             }
-            // Spawn new enemy on random position
-            _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count - 1);
-            _enemySpawnTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (_enemySpawnTimer > 2000)
-            {
-                _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
-                _enemies.Last().LoadContent(Content);
-                _enemySpawnTimer -= 2000;
-            }
+
+            _player.Update(gameTime);
             _background.Update();
-
             
-            
-
-
-
             base.Update(gameTime);
         }
 

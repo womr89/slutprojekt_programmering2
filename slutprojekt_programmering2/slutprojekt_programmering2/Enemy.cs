@@ -18,7 +18,7 @@ namespace slutprojekt_programmering2
         /// <param name="viewWindow">the entire game-screen width and height</param>
         public Enemy(Vector2 viewWindow):base (viewWindow)
         {
-            SpawnPosition.Y = ViewWindow.Y;
+            
         }
 
         public override void LoadContent(ContentManager content)
@@ -32,10 +32,7 @@ namespace slutprojekt_programmering2
         /// <param name="gameTime">Currently not used, inherited from Game1.cs Update</param>
         public override void Update(GameTime gameTime)
         {
-            // Spawn position X is viewWindow (1000) - Texture.Width / 2 (125 / 2)
-            //SpawnPosition.X = ViewWindow.X - Texture.Width/2;
-            
-            Position.Y += 5;
+            Position.Y += 7;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
