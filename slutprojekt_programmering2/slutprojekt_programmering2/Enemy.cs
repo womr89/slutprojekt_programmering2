@@ -33,8 +33,8 @@ namespace slutprojekt_programmering2
         public override void Update(GameTime gameTime)
         {
             // Spawn position X is viewWindow (1000) - Texture.Width / 2 (125 / 2)
-            SpawnPosition.X = ViewWindow.X - Texture.Width/2;
-
+            //SpawnPosition.X = ViewWindow.X - Texture.Width/2;
+            
             Position.Y += 5;
         }
 

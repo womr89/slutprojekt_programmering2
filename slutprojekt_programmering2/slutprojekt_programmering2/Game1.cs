@@ -22,18 +22,26 @@ namespace slutprojekt_programmering2
         SpriteBatch _spriteBatch;
         private Player _player;
         private List<Enemy> _enemies = new List<Enemy>();
+        private float _enemySpawnTimer;
+        private int _randomNumber;
         private List<Ally> _allies = new List<Ally>();
+        private List<Car> _allCars = new List<Car>();
+
         // List of avalible spawn positions
-        private List<Vector2> _allySpawnPos = new List<Vector2>(new Vector2[]
+        private readonly List<Vector2> _allySpawnPos = new List<Vector2>(new Vector2[]
         {
             new Vector2(695, 225), new Vector2(950, 225),
             new Vector2(695, 470), new Vector2(950, 470),
             new Vector2(695, 710), new Vector2(950, 710),
             new Vector2(695, 950), new Vector2(950, 950)
         });
-        private Random _randomSpawn = new Random((int)DateTime.Now.Ticks);
+        private readonly List<Vector2> _enemySpawnPos = new List<Vector2>(new Vector2[]
+        {
+            new Vector2(180, 0),
+            new Vector2(440, 0)
+        }); 
+        private readonly Random _randomSpawn = new Random((int)DateTime.Now.Ticks);
         private int _randomSelect;
-
         
         private Background _background;
 
@@ -51,10 +59,10 @@ namespace slutprojekt_programmering2
         }
 
         /// <summary>
-        /// Random Start spawn position method
+        /// Random Start spawn position method, generates a random number
         /// </summary>
         /// <returns>retruns avalible start position</returns>
-        private int RandomStartSpawn()
+        private int AllyRandomStartSpawn()
         {
             
             int spawn = _randomSpawn.Next(_allySpawnPos.Count);
@@ -62,9 +70,9 @@ namespace slutprojekt_programmering2
             return spawn;
         }
         /// <summary>
-        /// Removes taken position from list
+        /// Removes taken position from Ally list
         /// </summary>
-        private void RemoveSpawn()
+        private void AllyRemoveSpawn()
         {
                 _allySpawnPos.RemoveAt(_randomSelect);
         }
@@ -87,17 +95,30 @@ namespace slutprojekt_programmering2
             graphics.PreferredBackBufferWidth = (int)_viewWindow.X;
             graphics.ApplyChanges();
 
-            _player = new Player(new Vector2(695, 470));
+            _player = new Player(new Vector2(180, 0));
             for (int i = 0; i < 4; i++)
             {
                 // Gets a random number
-                _randomSelect = RandomStartSpawn();
+                _randomSelect = AllyRandomStartSpawn();
                 // Adds a new Ally with a start position vector2 random number in list
                 _allies.Add(new Ally(_allySpawnPos[_randomSelect]));
                 // Removes the used position
-                RemoveSpawn();
+                AllyRemoveSpawn();
             }
+            _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count - 1);
+            _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
             
+            
+
+
+            foreach (Ally ally in _allies)
+            {
+                _allCars.Add(ally);
+            }
+            foreach (Enemy enemy in _enemies)
+            {
+                _allCars.Add(enemy);
+            }
 
             _background = new Background();
             
@@ -113,12 +134,18 @@ namespace slutprojekt_programmering2
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // Load images
+            // Load images:
+            // Background
             _background.LoadContent(Content);
+            // Player
             _player.LoadContent(Content);
-            //_enemy.LoadContent(Content);
-
+            // Allies
             foreach (var car in _allies)
+            {
+                car.LoadContent(Content);
+            }
+            // Enemies
+            foreach (var car in _enemies)
             {
                 car.LoadContent(Content);
             }
@@ -153,7 +180,19 @@ namespace slutprojekt_programmering2
             {
                 car.Update(gameTime);
             }
-
+            foreach (var car in _enemies)
+            {
+                car.Update(gameTime);
+            }
+            // Spawn new enemy on random position
+            _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count - 1);
+            _enemySpawnTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (_enemySpawnTimer > 2000)
+            {
+                _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
+                _enemies.Last().LoadContent(Content);
+                _enemySpawnTimer -= 2000;
+            }
             _background.Update();
 
             
@@ -184,6 +223,10 @@ namespace slutprojekt_programmering2
             foreach (var ally in _allies)
             {
                 ally.Draw(_spriteBatch);
+            }
+            foreach (var enemy in _enemies)
+            {
+                enemy.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();

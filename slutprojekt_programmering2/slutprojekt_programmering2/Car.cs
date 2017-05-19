@@ -35,7 +35,8 @@ namespace slutprojekt_programmering2
         protected Vector2 ViewWindow;
         protected Vector2 SpawnPosition;
         protected float Rotation;
-        protected Colision Colision;
+        protected Collision Collision;
+        Rectangle _carRectangle;
 
         // Random Color
         protected readonly CarColor Color;
@@ -55,7 +56,8 @@ namespace slutprojekt_programmering2
 
         protected virtual void Initialize()
         {
-            Colision = new Colision();
+            Collision = new Collision(_carRectangle);
+
         }
         /// <summary>
         /// Loads texture with random car-Color. $"_car{Color}" is instead of typing: "_carBlue, _carGreen, ... ect".
@@ -65,6 +67,7 @@ namespace slutprojekt_programmering2
         public virtual void LoadContent(ContentManager content)
         {
             Texture = content.Load<Texture2D>($"_car{Color}");
+            _carRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
         }
 
         public virtual void Update(GameTime gameTime)

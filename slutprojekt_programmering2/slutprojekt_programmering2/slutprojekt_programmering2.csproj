@@ -75,7 +75,7 @@
     <Compile Include="Ally.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Car.cs" />
-    <Compile Include="Colision.cs" />
+    <Compile Include="Collision.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
