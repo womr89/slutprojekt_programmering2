@@ -10,8 +10,13 @@ namespace slutprojekt_programmering2
 {
     class Ally : Car
     {
+        Random _randomCrash = new Random();
+        private int _random;
+        private float _rotation2;
+        private bool _startRotate;
         public Ally(Vector2 viewWindow) : base(viewWindow)
         {
+            _rotation2 = (float)Math.PI;
             
         }
 
@@ -22,13 +27,29 @@ namespace slutprojekt_programmering2
 
         public override void Update(GameTime gameTime)
         {
+            
             Position.Y += 5;
+            _random = _randomCrash.Next(0, 500);
 
+            if (_random == 1)
+            {
+                _startRotate = true;
+            }
+            while (_startRotate)
+            {
+                _rotation2 -= (float)1;
+                if (_rotation2 == (float)Math.PI - 1)
+                {
+                    _startRotate = false;
+                }
+            }
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            Rotation = (float) Math.PI;
+            Rotation = _rotation2;
+            
             base.Draw(spriteBatch);
         }
     }

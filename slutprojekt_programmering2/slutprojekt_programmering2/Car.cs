@@ -32,11 +32,11 @@ namespace slutprojekt_programmering2
         protected Texture2D Texture;
         protected Vector2 Position;
         protected KeyboardState State;
-        protected Vector2 ViewWindow;
+        protected Vector2 StartPosition;
         protected Vector2 SpawnPosition;
         protected float Rotation;
         protected Collision Collision;
-        Rectangle _carRectangle;
+        public Rectangle _carRectangle { get; private set; }
 
         // Random Color
         protected readonly CarColor Color;
@@ -45,18 +45,18 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// Car constructor
         /// </summary>
-        /// <param name="viewWindow">Size of the game-screen, width and height.</param>
-        protected Car(Vector2 viewWindow)
+        /// <param name="startPosition">Gets the vector2 start position cordinates.</param>
+        protected Car(Vector2 startPosition)
         {
-            this.ViewWindow = viewWindow;
-            Position = viewWindow;
+            StartPosition = startPosition;
+            Position = startPosition;
 
             Color = (CarColor)random.Next(0, 5);
         }
 
         protected virtual void Initialize()
         {
-            Collision = new Collision(_carRectangle);
+            
 
         }
         /// <summary>
@@ -72,7 +72,7 @@ namespace slutprojekt_programmering2
 
         public virtual void Update(GameTime gameTime)
         {
-            
+            _carRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
         }
         /// <summary>
         /// Draws the texture for all classes that inherit from Car.cs
@@ -82,7 +82,7 @@ namespace slutprojekt_programmering2
         {
             spriteBatch.Draw(
                Texture
-               , new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height)
+               , _carRectangle
                , null
                , Microsoft.Xna.Framework.Color.White
                , Rotation                            // Rotation

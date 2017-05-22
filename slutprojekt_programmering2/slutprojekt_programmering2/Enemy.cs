@@ -15,8 +15,8 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// Setting value to SpawnPosition.Y
         /// </summary>
-        /// <param name="viewWindow">the entire game-screen width and height</param>
-        public Enemy(Vector2 viewWindow):base (viewWindow)
+        /// <param name="startPosition">the entire game-screen width and height</param>
+        public Enemy(Vector2 startPosition):base (startPosition)
         {
             
         }
@@ -33,6 +33,8 @@ namespace slutprojekt_programmering2
         public override void Update(GameTime gameTime)
         {
             Position.Y += 7;
+
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

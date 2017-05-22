@@ -14,8 +14,8 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="viewWindow">the entire game-screen width and height</param>
-        public Player(Vector2 viewWindow): base(viewWindow)
+        /// <param name="startPosition">the entire game-screen width and height</param>
+        public Player(Vector2 startPosition): base(startPosition)
         {
             
         }
@@ -33,9 +33,9 @@ namespace slutprojekt_programmering2
         public override void Update(GameTime gameTime)
         {
             // Start Position               // Texture / 4 to get the car in center.
-            //ViewWindow.Y = ViewWindow.Y / 2 + Texture.Height / 4;
-            //ViewWindow.X = ViewWindow.X / 2 + Texture.Width / 4;
-            //SpawnPosition = ViewWindow;
+            //startPosition.Y = startPosition.Y / 2 + Texture.Height / 4;
+            //startPosition.X = startPosition.X / 2 + Texture.Width / 4;
+            //SpawnPosition = startPosition;
 
             State = Keyboard.GetState();
             // Keyboard input
@@ -59,7 +59,8 @@ namespace slutprojekt_programmering2
             {
                 Position.Y += 8;
             }
-            
+
+            base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

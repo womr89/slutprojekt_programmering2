@@ -27,6 +27,7 @@ namespace slutprojekt_programmering2
         private List<Ally> _allies = new List<Ally>();
         private float _allySpawnTimer;
         private List<Car> _allCars = new List<Car>();
+        private Collision _collision;
 
         // List of avalible spawn positions
         private readonly List<Vector2> _allyStartSpawnPos = new List<Vector2>(new Vector2[]
@@ -220,6 +221,8 @@ namespace slutprojekt_programmering2
             _player.Update(gameTime);
             _background.Update();
             
+            _collision = new Collision(_allCars);
+
             base.Update(gameTime);
         }
 
