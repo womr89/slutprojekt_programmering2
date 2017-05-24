@@ -29,9 +29,10 @@ namespace slutprojekt_programmering2
         {
             
             Position.Y += 5;
+            Position.X -= 2;
             _random = _randomCrash.Next(0, 500);
 
-            if (_random == 1)
+            /*if (_random == 1)
             {
                 _startRotate = true;
             }
@@ -43,6 +44,7 @@ namespace slutprojekt_programmering2
                     _startRotate = false;
                 }
             }
+            */
             base.Update(gameTime);
         }
 

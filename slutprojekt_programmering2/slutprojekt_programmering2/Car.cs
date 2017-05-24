@@ -36,7 +36,11 @@ namespace slutprojekt_programmering2
         protected Vector2 SpawnPosition;
         protected float Rotation;
         protected Collision Collision;
-        public Rectangle _carRectangle { get; private set; }
+        public Rectangle CarRectangle { get; private set; }
+
+        // Debug
+        protected Texture2D DebugTexture;
+
 
         // Random Color
         protected readonly CarColor Color;
@@ -67,12 +71,18 @@ namespace slutprojekt_programmering2
         public virtual void LoadContent(ContentManager content)
         {
             Texture = content.Load<Texture2D>($"_car{Color}");
-            _carRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+            CarRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+        }
+
+        public void LoadDebugTexture(Texture2D debugTexture)
+        {
+            DebugTexture = debugTexture;
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            _carRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+            CarRectangle = new Rectangle((int)Position.X - Texture.Width / 2, (int)Position.Y - Texture.Height / 2, Texture.Width, Texture.Height);
+
         }
         /// <summary>
         /// Draws the texture for all classes that inherit from Car.cs
@@ -81,14 +91,17 @@ namespace slutprojekt_programmering2
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(
-               Texture
-               , _carRectangle
-               , null
-               , Microsoft.Xna.Framework.Color.White
-               , Rotation                            // Rotation
-               , SpawnPosition                       // Start Position
-               , SpriteEffects.None
-               , 0);
+               Texture, 
+               Position,
+               null,
+               Microsoft.Xna.Framework.Color.White,
+               Rotation,
+               new Vector2(Texture.Width / 2, Texture.Height / 2),
+               new Vector2(1,1),
+               SpriteEffects.None,
+               0);
+
+            spriteBatch.Draw(DebugTexture , CarRectangle, Microsoft.Xna.Framework.Color.White);
         }
     }
 }
