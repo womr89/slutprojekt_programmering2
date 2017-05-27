@@ -29,7 +29,8 @@ namespace slutprojekt_programmering2
         {
             
             Position.Y += 5;
-            Position.X -= 2;
+            // TODO used when debugging collision between Ally and Enemy
+            //Position.X -= 5;
             _random = _randomCrash.Next(0, 500);
 
             /*if (_random == 1)

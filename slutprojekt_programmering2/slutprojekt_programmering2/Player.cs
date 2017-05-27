@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
@@ -11,6 +12,9 @@ namespace slutprojekt_programmering2
 {
     class Player : Car
     {
+        public double Score { get; set; }
+        public bool Move;
+
         /// <summary>
         /// 
         /// </summary>
@@ -20,14 +24,20 @@ namespace slutprojekt_programmering2
             
         }
 
+        public override void Initialize()
+        {
+            // Player start score
+            Score = 0;
+        }
         public override void LoadContent(ContentManager content)
         {
-            Texture = content.Load<Texture2D>("_carWhite");
+            Texture = content.Load<Texture2D>("_carBlue");
         }
 
         /// <summary>
         /// Also sets the spawnposition
         /// Updating the Position when arrow-Keys is pressed.
+        /// The bool "Move" is assigned in Collision, If false the car cant go up
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
@@ -50,16 +60,17 @@ namespace slutprojekt_programmering2
                 Position.X += 8;
             }
             // Up key, car go forward
-            if (State.IsKeyDown(Keys.Up))
+            if (State.IsKeyDown(Keys.Up) && Move)
             {
-                Position.Y -= 8;
+                Position.Y -= 8;   
             }
             // Down key, car slowing down (going backwards)
             else if (State.IsKeyDown(Keys.Down))
             {
                 Position.Y += 8;
             }
-
+            // TODO fix Score
+            Debug.WriteLine(Score);
             base.Update(gameTime);
         }
 

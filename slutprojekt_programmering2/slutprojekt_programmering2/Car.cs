@@ -37,6 +37,8 @@ namespace slutprojekt_programmering2
         protected float Rotation;
         protected Collision Collision;
         public Rectangle CarRectangle { get; private set; }
+        public Vector2 CarPosition { get; private set; }
+        
 
         // Debug
         protected Texture2D DebugTexture;
@@ -58,7 +60,7 @@ namespace slutprojekt_programmering2
             Color = (CarColor)random.Next(0, 5);
         }
 
-        protected virtual void Initialize()
+        public virtual void Initialize()
         {
             
 
@@ -72,8 +74,9 @@ namespace slutprojekt_programmering2
         {
             Texture = content.Load<Texture2D>($"_car{Color}");
             CarRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+            CarPosition = new Vector2((int)Position.X, (int)Position.Y);
         }
-
+        // for debugging
         public void LoadDebugTexture(Texture2D debugTexture)
         {
             DebugTexture = debugTexture;
@@ -82,7 +85,7 @@ namespace slutprojekt_programmering2
         public virtual void Update(GameTime gameTime)
         {
             CarRectangle = new Rectangle((int)Position.X - Texture.Width / 2, (int)Position.Y - Texture.Height / 2, Texture.Width, Texture.Height);
-
+            CarPosition = new Vector2((int)Position.X, (int)Position.Y);
         }
         /// <summary>
         /// Draws the texture for all classes that inherit from Car.cs
@@ -101,7 +104,8 @@ namespace slutprojekt_programmering2
                SpriteEffects.None,
                0);
 
-            spriteBatch.Draw(DebugTexture , CarRectangle, Microsoft.Xna.Framework.Color.White);
+            // Draw debugg Rectangle
+            //spriteBatch.Draw(DebugTexture , CarRectangle, Microsoft.Xna.Framework.Color.White);
         }
     }
 }

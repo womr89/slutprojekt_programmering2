@@ -29,11 +29,13 @@ namespace slutprojekt_programmering2
         private float _allySpawnTimer;
         private List<Car> _allCars = new List<Car>();
         private Collision _collision;
+        private Score _score;
 
         // Debug
         private Texture2D _debugTexture;
 
         // List of avalible spawn positions
+        // Kanske kan ta bort
         private readonly List<Vector2> _allyStartSpawnPos = new List<Vector2>(new Vector2[]
         {
             new Vector2(695, 225), new Vector2(950, 225),
@@ -43,13 +45,13 @@ namespace slutprojekt_programmering2
         });
         private readonly List<Vector2> _enemySpawnPos = new List<Vector2>(new Vector2[]
         {
-            new Vector2(180, -225),
-            new Vector2(440, -225)
+            new Vector2(120, -225),
+            new Vector2(380, -225)
         }); 
         private readonly List<Vector2> _allySpawnPos = new List<Vector2>(new Vector2[]
         {
-            new Vector2(695, -225),
-            new Vector2(950, -225)
+            new Vector2(635, -225),
+            new Vector2(890, -225)
         }); 
         private readonly Random _randomSpawn = new Random(/*(int)DateTime.Now.Ticks*/);
         private int _randomSelect;
@@ -120,7 +122,7 @@ namespace slutprojekt_programmering2
                 AllyRemoveSpawn();
             }
             */
-
+            // Kan förstöra första collison
             // Add new enemy in list
             _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count);
             _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
@@ -140,10 +142,12 @@ namespace slutprojekt_programmering2
                 _allCars.Add(enemy);
             }
             // Adds player to Allcar
-            _allCars.Add(_player);
+            //_allCars.Add(_player);
 
             _background = new Background();
+
             
+
             base.Initialize();
         }
 
@@ -180,7 +184,8 @@ namespace slutprojekt_programmering2
                 car.LoadDebugTexture(_debugTexture);
             }
             _collision = new Collision();
-
+            
+            _score = new Score();
 
             
             
@@ -193,7 +198,7 @@ namespace slutprojekt_programmering2
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            
         }
 
         
@@ -211,33 +216,35 @@ namespace slutprojekt_programmering2
             // add new enemy on random position every x milliseconds
             _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count);
             _enemySpawnTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (_enemySpawnTimer > 750)
+            if (_enemySpawnTimer > 1000)
             {
                 Enemy temp = new Enemy(_enemySpawnPos[_randomNumber]);
-               /* _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
-                _enemies.Last().LoadContent(Content);*/
-
+                /* _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
+                 _enemies.Last().LoadContent(Content);*/
+                 // Added to _enemies to use in Score.cs
+                _enemies.Add(temp);
                 _allCars.Add(temp);
                 _allCars.Last().LoadContent(Content);
                 _allCars.Last().LoadDebugTexture(_debugTexture);    // Debug
-
-                _enemySpawnTimer -= 750;
+                _enemySpawnTimer -= 1000;
             }
             // Add new allie on random position every x milliseconds
             _allySpawnTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
             _randomNumber = _randomSpawn.Next(_allySpawnPos.Count);
-            if (_allySpawnTimer > 1000)
+            if (_allySpawnTimer > 1200)
             {
                 Ally temp = new Ally(_allySpawnPos[_randomNumber]);
                 //_allies.Last().LoadContent(Content);
-
+                
+                // Added to _allies to use in Score.cs
+                _allies.Add(temp);
                 _allCars.Add(temp);
                 _allCars.Last().LoadContent(Content);
-                _allCars.Last().LoadDebugTexture(_debugTexture);    // Debug
+                _allCars.Last().LoadDebugTexture(_debugTexture);       // Debug
 
                 /*_allies.Add(temp);
                 _allies.Last().LoadContent(Content);*/
-                _allySpawnTimer -= 1000;
+                _allySpawnTimer -= 1200;
 
                 
             }
@@ -258,11 +265,17 @@ namespace slutprojekt_programmering2
             {
                car.Update(gameTime); 
             }
-            //_player.Update(gameTime);
-            
+            // Update Player
+            _player.Update(gameTime);
+            // Update background
             _background.Update();
+
+            // Check Collision
+            _collision.CheckAllyEnemyCollisions(ref _allCars);
+            _collision.CheckPlayerCollision(ref _allCars, _player);
+            _collision.CheckCollisionWalls(ref _allCars, _player);
+            _score.AddPoints(_enemies, _allies, _player);
             
-            _collision.CheckCollisions(ref _allCars);
 
             base.Update(gameTime);
         }
@@ -277,7 +290,7 @@ namespace slutprojekt_programmering2
             // Background
             _background.Draw(_spriteBatch, _viewWindow);
             // Player
-            //_player.Draw(_spriteBatch);
+            _player.Draw(_spriteBatch);
             // Enemy
             //_enemy.Draw(_spriteBatch);
             // Ally
