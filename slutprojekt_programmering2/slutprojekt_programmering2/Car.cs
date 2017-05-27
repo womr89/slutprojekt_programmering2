@@ -39,11 +39,9 @@ namespace slutprojekt_programmering2
         public Rectangle CarRectangle { get; private set; }
         public Vector2 CarPosition { get; private set; }
         
-
         // Debug
         protected Texture2D DebugTexture;
-
-
+        
         // Random Color
         protected readonly CarColor Color;
         protected static Random random = new Random((int)DateTime.Now.Ticks);

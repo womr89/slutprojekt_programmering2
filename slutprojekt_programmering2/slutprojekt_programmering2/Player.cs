@@ -13,7 +13,10 @@ namespace slutprojekt_programmering2
     class Player : Car
     {
         public double Score { get; set; }
-        public bool Move;
+        public bool MoveTop;
+        public bool MoveBottom;
+        public bool MoveLeft;
+        public bool MoveRight;
 
         /// <summary>
         /// 
@@ -37,7 +40,7 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// Also sets the spawnposition
         /// Updating the Position when arrow-Keys is pressed.
-        /// The bool "Move" is assigned in Collision, If false the car cant go up
+        /// The bool "MoveTop" is assigned in Collision, If false the car cant go up
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
@@ -50,22 +53,22 @@ namespace slutprojekt_programmering2
             State = Keyboard.GetState();
             // Keyboard input
             // Left key, car go left
-            if (State.IsKeyDown(Keys.Left))
+            if (State.IsKeyDown(Keys.Left) && MoveLeft)
             {
                 Position.X -= 8;
             }
             // Right key, car go right
-            else if (State.IsKeyDown(Keys.Right))
+            else if (State.IsKeyDown(Keys.Right) && MoveRight)
             {
                 Position.X += 8;
             }
             // Up key, car go forward
-            if (State.IsKeyDown(Keys.Up) && Move)
+            if (State.IsKeyDown(Keys.Up) && MoveTop)
             {
                 Position.Y -= 8;   
             }
             // Down key, car slowing down (going backwards)
-            else if (State.IsKeyDown(Keys.Down))
+            else if (State.IsKeyDown(Keys.Down) && MoveBottom)
             {
                 Position.Y += 8;
             }
