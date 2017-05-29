@@ -97,7 +97,7 @@ namespace slutprojekt_programmering2
                null,
                Microsoft.Xna.Framework.Color.White,
                Rotation,
-               new Vector2(Texture.Width / 2, Texture.Height / 2),
+               new Vector2((float)Texture.Width / 2, (float)Texture.Height / 2),
                new Vector2(1,1),
                SpriteEffects.None,
                0);

@@ -40,7 +40,7 @@ namespace slutprojekt_programmering2
             {
                 for (int j = 0; j < allCars.Count; j++)
                 {
-                    if (allCars[i].CarRectangle.Intersects(allCars[j].CarRectangle) && (i != j) && (i != 0) && (j != 0))
+                    if (allCars[i].CarRectangle.Intersects(allCars[j].CarRectangle) && (i != j))
                     {
                         allCars.RemoveAt(j);
                         allCars.RemoveAt(i);
@@ -79,40 +79,40 @@ namespace slutprojekt_programmering2
                 {
                     carList.RemoveAt(i);
                 }
-                if (carList[i].CarPosition.X < 0)
+                else if (carList[i].CarPosition.X < 0)
                 {
                     carList.RemoveAt(i);
                 }
-                if (carList[i].CarPosition.Y > 1100)
+                else if (carList[i].CarPosition.Y > 1100)
                 {
                     carList.RemoveAt(i);
                 }
-
-                // if player is to high up
-                if (player.CarPosition.Y < 100)
-                {
-                    player.MoveTop = false;
-                }
-                else player.MoveTop = true;
-                // if player is to low
-                if (player.CarPosition.Y > 890)
-                {
-                    player.MoveBottom = false;
-                }
-                else player.MoveBottom = true;
-                // if player is to far to the left
-                if (player.CarPosition.X < 70)
-                {
-                    player.MoveLeft = false;
-                }
-                else player.MoveLeft = true;
-                // if player is to far to the right 
-                if (player.CarPosition.X > 935)
-                {
-                    player.MoveRight = false;
-                }
-                else player.MoveRight = true;
             }
+            // if player is to high up
+            if (player.CarPosition.Y < 100)
+            {
+                player.MoveTop = false;
+            }
+            else player.MoveTop = true;
+            // if player is to low
+            if (player.CarPosition.Y > 890)
+            {
+                player.MoveBottom = false;
+            }
+            else player.MoveBottom = true;
+            // if player is to far to the left
+            if (player.CarPosition.X < 70)
+            {
+                player.MoveLeft = false;
+            }
+            else player.MoveLeft = true;
+            // if player is to far to the right 
+            if (player.CarPosition.X > 935)
+            {
+                player.MoveRight = false;
+            }
+            else player.MoveRight = true;
+            
         }
     }
 }

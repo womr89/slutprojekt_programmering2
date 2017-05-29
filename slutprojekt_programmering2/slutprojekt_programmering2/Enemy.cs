@@ -32,7 +32,7 @@ namespace slutprojekt_programmering2
         /// <param name="gameTime">Currently not used, inherited from Game1.cs Update</param>
         public override void Update(GameTime gameTime)
         {
-            Position.Y += 7;
+            Position.Y += 1;
 
             base.Update(gameTime);
         }

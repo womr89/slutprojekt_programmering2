@@ -14,7 +14,7 @@ namespace slutprojekt_programmering2
         private int _random;
         private float _rotation2;
         private bool _startRotate;
-        public Ally(Vector2 viewWindow) : base(viewWindow)
+        public Ally(Vector2 startPosition) : base(startPosition)
         {
             _rotation2 = (float)Math.PI;
             
@@ -28,10 +28,12 @@ namespace slutprojekt_programmering2
         public override void Update(GameTime gameTime)
         {
             
-            Position.Y += 5;
+            Position.Y += 1;
             // TODO used when debugging collision between Ally and Enemy
-            Position.X -= 7;
-            _random = _randomCrash.Next(0, 500);
+            //Position.X -= 4;
+
+
+            //_random = _randomCrash.Next(0, 500);
 
             /*if (_random == 1)
             {

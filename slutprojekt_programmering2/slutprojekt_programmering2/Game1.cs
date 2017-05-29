@@ -312,7 +312,9 @@ namespace slutprojekt_programmering2
             {
                 car.Draw(_spriteBatch);
             }
-            _spriteBatch.End();
+            
+            
+             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
