@@ -42,8 +42,18 @@ namespace slutprojekt_programmering2
                 {
                     if (allCars[i].CarRectangle.Intersects(allCars[j].CarRectangle) && (i != j))
                     {
-                        allCars.RemoveAt(j);
-                        allCars.RemoveAt(i);
+                        // To not remove a lower number before the geater number. 
+                        // If so this might cause intersect to remove 1 wrong car
+                        if (j > i)
+                        {
+                            allCars.RemoveAt(j);
+                            allCars.RemoveAt(i);
+                        }
+                        else
+                        {
+                            allCars.RemoveAt(i);
+                            allCars.RemoveAt(j);
+                        }
                     }
                 }
             }

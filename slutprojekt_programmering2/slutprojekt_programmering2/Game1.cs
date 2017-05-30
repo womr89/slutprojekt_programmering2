@@ -272,9 +272,10 @@ namespace slutprojekt_programmering2
 
             // Check Collision
             //_collision.CheckAllyEnemyCollisions(ref _allCars);
-            _collision.CheckAllyEnemyCollisions(ref _allCars);
+            
             _collision.CheckPlayerCollision(ref _allCars, _player);
             _collision.CheckCollisionWalls(ref _allCars, _player);
+            _collision.CheckAllyEnemyCollisions(ref _allCars);
             _score.AddPoints(_enemies, _allies, _player);
             
 
