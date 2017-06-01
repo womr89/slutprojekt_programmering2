@@ -17,11 +17,11 @@ namespace slutprojekt_programmering2
     /// </summary>
     public enum CarColor
     {
-        Blue = 0,
-        Green = 1,
-        Purple = 2,
-        Red = 3,
-        White = 4
+        Blue,
+        Green,
+        Purple,
+        Red,
+        White
     }
 
     class Car
@@ -30,6 +30,7 @@ namespace slutprojekt_programmering2
         /// Variables mainly used by classes that inherit
         /// </summary>
         protected Texture2D Texture;
+        protected Texture2D Explosion;
         protected Vector2 Position;
         protected KeyboardState State;
         protected Vector2 StartPosition;
@@ -38,6 +39,7 @@ namespace slutprojekt_programmering2
         protected Collision Collision;
         public Rectangle CarRectangle { get; private set; }
         public Vector2 CarPosition { get; private set; }
+        public bool Diebool { get; private set; }
         
         // Debug
         protected Texture2D DebugTexture;
@@ -73,8 +75,11 @@ namespace slutprojekt_programmering2
             Texture = content.Load<Texture2D>($"_car{Color}");
             CarRectangle = new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
             CarPosition = new Vector2((int)Position.X, (int)Position.Y);
+            Diebool = false;
+            Explosion = content.Load<Texture2D>("explosion");
+
         }
-        // for debugging
+        // Used when debugging
         public void LoadDebugTexture(Texture2D debugTexture)
         {
             DebugTexture = debugTexture;
@@ -84,6 +89,12 @@ namespace slutprojekt_programmering2
         {
             CarRectangle = new Rectangle((int)Position.X - Texture.Width / 2, (int)Position.Y - Texture.Height / 2, Texture.Width, Texture.Height);
             CarPosition = new Vector2((int)Position.X, (int)Position.Y);
+            
+        }
+
+        public void Die()
+        {
+            Diebool = true;
         }
         /// <summary>
         /// Draws the texture for all classes that inherit from Car.cs
@@ -101,6 +112,11 @@ namespace slutprojekt_programmering2
                new Vector2(1,1),
                SpriteEffects.None,
                0);
+            // TODO explosion när bil crashar
+            if (Diebool)
+            {
+                spriteBatch.Draw(Explosion, CarPosition, Microsoft.Xna.Framework.Color.White);
+            }
 
             // Draw debugg Rectangle
             //spriteBatch.Draw(DebugTexture , CarRectangle, Microsoft.Xna.Framework.Color.White);

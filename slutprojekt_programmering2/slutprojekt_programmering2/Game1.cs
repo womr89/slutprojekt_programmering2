@@ -19,6 +19,7 @@ namespace slutprojekt_programmering2
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        private KeyboardState State;
         GraphicsDeviceManager graphics;
         SpriteBatch _spriteBatch;
         private Player _player;
@@ -34,15 +35,6 @@ namespace slutprojekt_programmering2
         // Debug
         private Texture2D _debugTexture;
 
-        // List of avalible spawn positions
-        // Kanske kan ta bort
-        private readonly List<Vector2> _allyStartSpawnPos = new List<Vector2>(new Vector2[]
-        {
-            new Vector2(695, 225), new Vector2(950, 225),
-            new Vector2(695, 470), new Vector2(950, 470),
-            new Vector2(695, 710), new Vector2(950, 710),
-            new Vector2(695, 950), new Vector2(950, 950)
-        });
         private readonly List<Vector2> _enemySpawnPos = new List<Vector2>(new Vector2[]
         {
             new Vector2(120, -225),
@@ -72,25 +64,6 @@ namespace slutprojekt_programmering2
         }
 
         /// <summary>
-        /// Random Start spawn position method, generates a random number
-        /// </summary>
-        /// <returns>retruns avalible start position</returns>
-        private int AllyRandomStartSpawn()
-        {
-            
-            int spawn = _randomSpawn.Next(_allyStartSpawnPos.Count);
-
-            return spawn;
-        }
-        /// <summary>
-        /// Removes taken position from Ally list
-        /// </summary>
-        private void AllyRemoveSpawn()
-        {
-                _allyStartSpawnPos.RemoveAt(_randomSelect);
-        }
-
-        /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
         /// related content.  Calling base.Initialize will enumerate through any components
@@ -107,22 +80,11 @@ namespace slutprojekt_programmering2
             graphics.PreferredBackBufferHeight = (int)_viewWindow.Y;
             graphics.PreferredBackBufferWidth = (int)_viewWindow.X;
             graphics.ApplyChanges();
+            
             // New player
             _player = new Player(new Vector2(400, 450));
-            // Add new Allies to list
             
-            /*
-            for (int i = 0; i < 4; i++)
-            {
-                // Gets a random number
-                _randomSelect = AllyRandomStartSpawn();
-                // Adds a new Ally with a start position vector2 random number in list
-                _allies.Add(new Ally(_allyStartSpawnPos[_randomSelect]));
-                // Removes the used position
-                AllyRemoveSpawn();
-            }
-            */
-            // Kan förstöra första collison
+
             // Add new enemy in list
             _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count);
             _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
@@ -141,12 +103,13 @@ namespace slutprojekt_programmering2
             {
                 _allCars.Add(enemy);
             }
+
             // Adds player to Allcar
             //_allCars.Add(_player);
 
             _background = new Background();
 
-            
+
 
             base.Initialize();
         }
@@ -170,21 +133,22 @@ namespace slutprojekt_programmering2
             _background.LoadContent(Content);
             // Player
             _player.LoadContent(Content);
-            _player.LoadDebugTexture(_debugTexture);    // Debugg load texture for player
+            _player.LoadDebugTexture(_debugTexture);    // Debug load texture for player
             // Allies
             foreach (var car in _allies)
             {
                 car.LoadContent(Content);
-                car.LoadDebugTexture(_debugTexture);
+                car.LoadDebugTexture(_debugTexture);    // Debug
             }
             // Enemies
             foreach (var car in _enemies)
             {
                 car.LoadContent(Content);
-                car.LoadDebugTexture(_debugTexture);
+                car.LoadDebugTexture(_debugTexture);    // Debug
             }
-            _collision = new Collision();
+            State = new KeyboardState();
             
+            _collision = new Collision();
             _score = new Score();
 
             
@@ -203,63 +167,46 @@ namespace slutprojekt_programmering2
 
         
         /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
+        /// Allows the game to run logic such as updating,
+        /// checking for collisions, gathering input.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            // Allows the game to exit // TODO Exit fungerar inte.
+            if (State.IsKeyDown(Keys.Escape))
                 this.Exit();
 
             // add new enemy on random position every x milliseconds
             _randomNumber = _randomSpawn.Next(_enemySpawnPos.Count);
             _enemySpawnTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (_enemySpawnTimer > 1000)
+            if (_enemySpawnTimer > 700)
             {
                 Enemy temp = new Enemy(_enemySpawnPos[_randomNumber]);
-                /* _enemies.Add(new Enemy(_enemySpawnPos[_randomNumber]));
-                 _enemies.Last().LoadContent(Content);*/
+
                  // Added to _enemies to use in Score.cs
                 _enemies.Add(temp);
                 _allCars.Add(temp);
                 _allCars.Last().LoadContent(Content);
                 _allCars.Last().LoadDebugTexture(_debugTexture);    // Debug
-                _enemySpawnTimer -= 1000;
+                _enemySpawnTimer -= 700;
             }
             // Add new allie on random position every x milliseconds
             _allySpawnTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
             _randomNumber = _randomSpawn.Next(_allySpawnPos.Count);
-            if (_allySpawnTimer > 1200)
+            if (_allySpawnTimer > 1700)
             {
                 Ally temp = new Ally(_allySpawnPos[_randomNumber]);
-                //_allies.Last().LoadContent(Content);
                 
                 // Added to _allies to use in Score.cs
                 _allies.Add(temp);
                 _allCars.Add(temp);
                 _allCars.Last().LoadContent(Content);
                 _allCars.Last().LoadDebugTexture(_debugTexture);       // Debug
-
-                /*_allies.Add(temp);
-                _allies.Last().LoadContent(Content);*/
-                _allySpawnTimer -= 1200;
+                _allySpawnTimer -= 1700;
 
                 
             }
-
-            /*// update allies
-            foreach (var car in _allies)
-            {
-                car.Update(gameTime);
-            }
-            // update enemies
-            foreach (var car in _enemies)
-            {
-                car.Update(gameTime);
-            }
-            */
 
             foreach (Car car in _allCars)
             {
@@ -269,16 +216,12 @@ namespace slutprojekt_programmering2
             _player.Update(gameTime);
             // Update background
             _background.Update();
-
-            // Check Collision
-            //_collision.CheckAllyEnemyCollisions(ref _allCars);
             
             _collision.CheckPlayerCollision(ref _allCars, _player);
             _collision.CheckCollisionWalls(ref _allCars, _player);
             _collision.CheckAllyEnemyCollisions(ref _allCars);
             _score.AddPoints(_enemies, _allies, _player);
             
-
             base.Update(gameTime);
         }
 
@@ -293,27 +236,12 @@ namespace slutprojekt_programmering2
             _background.Draw(_spriteBatch, _viewWindow);
             // Player
             _player.Draw(_spriteBatch);
-            // Enemy
-            //_enemy.Draw(_spriteBatch);
-            // Ally
-            //_ally.Draw(_spriteBatch);
-            //_ally.Draw(_spriteBatch);
-            /*
-            foreach (var ally in _allies)
-            {
-                ally.Draw(_spriteBatch);
-            }
-            foreach (var enemy in _enemies)
-            {
-                enemy.Draw(_spriteBatch);
-            }
-            */
-
+            
+            // Draw Enemy and Ally
             foreach (Car car in _allCars)
             {
                 car.Draw(_spriteBatch);
             }
-            
             
              _spriteBatch.End();
 

@@ -11,24 +11,6 @@ namespace slutprojekt_programmering2
 {
     class Collision
     {
-
-        /*public void CheckAllyEnemyCollisions(ref List<Car> carList)
-        {
-            for (int i = 0; i < carList.Count; i++)
-            {
-                for (int j = 0; j < carList.Count; j++)
-                {
-                    // TODO fix Collision
-                    if (carList[j].CarRectangle.Intersects(carList[i].CarRectangle) && i != j && i != 0 && j != 0)
-                    {
-                        carList.RemoveAt(i);
-                        carList.RemoveAt(j);
-                    }
-
-                }
-            }
-        }
-        */
         /// <summary>
         /// Checks if all cars intercets with each other
         /// Then removes both cars if intersected
@@ -46,11 +28,15 @@ namespace slutprojekt_programmering2
                         // If so this might cause intersect to remove 1 wrong car
                         if (j > i)
                         {
+                            allCars[i].Die();
+                            allCars[j].Die();
                             allCars.RemoveAt(j);
-                            allCars.RemoveAt(i);
+                            allCars.RemoveAt(i);   
                         }
                         else
                         {
+                            allCars[i].Die();
+                            allCars[j].Die();
                             allCars.RemoveAt(i);
                             allCars.RemoveAt(j);
                         }
@@ -61,8 +47,8 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// Checks if player intersects with all other cars
         /// </summary>
-        /// <param name="carList"></param>
-        /// <param name="player"></param>
+        /// <param name="carList">List of all cars</param>
+        /// <param name="player">Player car</param>
         public void CheckPlayerCollision(ref List<Car> carList, Player player)
         {
             for (int i = 0; i < carList.Count; i++)
@@ -76,10 +62,9 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// Checks if Enemies and Allies moves outside the game screen, 
         /// if the car has moved outside the sidewall or below the gamescreen the car will be removed from the list.
-        /// 
         /// </summary>
-        /// <param name="carList">Enemies and Allies</param>
-        /// <param name="player"></param>
+        /// <param name="carList">Cars Enemies and allies</param>
+        /// <param name="player">Player car</param>
         public void CheckCollisionWalls(ref List<Car> carList, Player player)
         {
             for (int i = 0; i < carList.Count; i++)
@@ -98,25 +83,30 @@ namespace slutprojekt_programmering2
                     carList.RemoveAt(i);
                 }
             }
-            // if player is to high up
+
+            // Player collision walls
+            // Top-wall
             if (player.CarPosition.Y < 100)
             {
                 player.MoveTop = false;
             }
             else player.MoveTop = true;
-            // if player is to low
+
+            // Bottom-wall
             if (player.CarPosition.Y > 890)
             {
                 player.MoveBottom = false;
             }
             else player.MoveBottom = true;
-            // if player is to far to the left
+
+            // Leftside
             if (player.CarPosition.X < 70)
             {
                 player.MoveLeft = false;
             }
             else player.MoveLeft = true;
-            // if player is to far to the right 
+
+            // Rightside 
             if (player.CarPosition.X > 935)
             {
                 player.MoveRight = false;

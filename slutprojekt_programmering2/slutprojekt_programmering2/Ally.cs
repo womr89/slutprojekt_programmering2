@@ -20,19 +20,14 @@ namespace slutprojekt_programmering2
             
         }
 
-        public override void LoadContent(ContentManager content)
-        {
-            base.LoadContent(content);
-        }
-
         public override void Update(GameTime gameTime)
         {
             
-            Position.Y += 1;
+            Position.Y += 5;
             // TODO used when debugging collision between Ally and Enemy
             //Position.X -= 4;
 
-
+            // TODO Bilarna (ALly och Enemy) ska slumpvis tappa kontroll och börja svänga ut från vägen och krasha
             //_random = _randomCrash.Next(0, 500);
 
             /*if (_random == 1)

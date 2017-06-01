@@ -45,10 +45,6 @@ namespace slutprojekt_programmering2
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            // Start Position               // Texture / 4 to get the car in center.
-            //startPosition.Y = startPosition.Y / 2 + Texture.Height / 4;
-            //startPosition.X = startPosition.X / 2 + Texture.Width / 4;
-            //SpawnPosition = startPosition;
 
             State = Keyboard.GetState();
             // Keyboard input
@@ -72,6 +68,7 @@ namespace slutprojekt_programmering2
             {
                 Position.Y += 8;
             }
+
             // TODO fix Score
             Debug.WriteLine(Score);
             base.Update(gameTime);

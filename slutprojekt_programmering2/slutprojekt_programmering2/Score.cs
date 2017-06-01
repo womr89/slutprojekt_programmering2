@@ -7,11 +7,15 @@ namespace slutprojekt_programmering2
 {
     class Score
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enemies"></param>
+        /// <param name="allies"></param>
+        /// <param name="player"></param>
         public void AddPoints(List<Enemy> enemies, List<Ally> allies, Player player)
         {
             
-
-
             if (player.CarPosition.X > 510) { 
             foreach (Ally ally in allies)
             {
