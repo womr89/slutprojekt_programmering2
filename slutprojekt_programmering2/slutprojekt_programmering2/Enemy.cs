@@ -29,7 +29,7 @@ namespace slutprojekt_programmering2
         /// <summary>
         /// Update metod, used to set SpawnPosition.X and constant speed to Position.Y
         /// </summary>
-        /// <param name="gameTime">Currently not used, inherited from Game1.cs Update</param>
+        /// <param name="gameTime">Currently not used, inherited from Game.cs Update</param>
         public override void Update(GameTime gameTime)
         {
             Position.Y += 12;

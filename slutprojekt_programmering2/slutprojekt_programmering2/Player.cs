@@ -8,11 +8,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace slutprojekt_programmering2
-{
-    class Player : Car
-    {
-        public double Score { get; set; }
+namespace slutprojekt_programmering2 {
+    class Player : Car {
+        public int Score;
         public bool MoveTop;
         public bool MoveBottom;
         public bool MoveLeft;
@@ -22,19 +20,19 @@ namespace slutprojekt_programmering2
         /// 
         /// </summary>
         /// <param name="startPosition">the entire game-screen width and height</param>
-        public Player(Vector2 startPosition): base(startPosition)
-        {
-            
+        public Player( Vector2 startPosition ) : base( startPosition ) {
         }
 
-        public override void Initialize()
-        {
-            // Player start score
-            Score = 0;
+        public override void LoadContent( ContentManager content ) {
+            Texture = content.Load<Texture2D>( "_carBlue" );
         }
-        public override void LoadContent(ContentManager content)
-        {
-            Texture = content.Load<Texture2D>("_carBlue");
+
+        public int GetPoints() {
+            return Score;
+        }
+
+        public void AddPoints( int points ) {
+            Score += points;
         }
 
         /// <summary>
@@ -43,41 +41,34 @@ namespace slutprojekt_programmering2
         /// The bool "MoveTop" is assigned in Collision, If false the car cant go up
         /// </summary>
         /// <param name="gameTime"></param>
-        public override void Update(GameTime gameTime)
-        {
-
+        public override void Update( GameTime gameTime ) {
             State = Keyboard.GetState();
             // Keyboard input
             // Left key, car go left
-            if (State.IsKeyDown(Keys.Left) && MoveLeft)
-            {
+            if ( State.IsKeyDown( Keys.Left ) && MoveLeft ) {
                 Position.X -= 8;
             }
             // Right key, car go right
-            else if (State.IsKeyDown(Keys.Right) && MoveRight)
-            {
+            else if ( State.IsKeyDown( Keys.Right ) && MoveRight ) {
                 Position.X += 8;
             }
+
             // Up key, car go forward
-            if (State.IsKeyDown(Keys.Up) && MoveTop)
-            {
-                Position.Y -= 8;   
+            if ( State.IsKeyDown( Keys.Up ) && MoveTop ) {
+                Position.Y -= 8;
             }
             // Down key, car slowing down (going backwards)
-            else if (State.IsKeyDown(Keys.Down) && MoveBottom)
-            {
+            else if ( State.IsKeyDown( Keys.Down ) && MoveBottom ) {
                 Position.Y += 8;
             }
 
-            // TODO fix Score
-            Debug.WriteLine(Score);
-            base.Update(gameTime);
+           
+            base.Update( gameTime );
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
-        {
+        public override void Draw( SpriteBatch spriteBatch ) {
             Rotation = (float) Math.PI;
-            base.Draw(spriteBatch);
+            base.Draw( spriteBatch );
         }
     }
 }
