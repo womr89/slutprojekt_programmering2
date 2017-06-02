@@ -9,12 +9,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace slutprojekt_programmering2 {
     class Collision {
+        // TODO Behöver nog inte denna collision
         /// <summary>
         /// Checks if all cars intercets with each other
         /// Then removes both cars if intersected
         /// </summary>
         /// <param name="carList"> reference of all cars</param>
-        public void CheckAllyEnemyCollision( ref List<Car> allCars ) {
+        public void CheckEnemiesCollision( ref List<Car> allCars ) {
             for ( int i = 0; i < allCars.Count; i++ ) {
                 for ( int j = 0; j < allCars.Count; j++ ) {
                     if ( allCars[i].CarRectangle.Intersects( allCars[j].CarRectangle ) && ( i != j ) ) {
@@ -85,14 +86,15 @@ namespace slutprojekt_programmering2 {
         }
 
         /// <summary>
-        /// Checks if Enemies and Allies moves outside the game screen, 
+        /// Checks if FastEnemies and SlowEnemies moves outside the game screen, 
         /// if the car has moved outside the sidewall or below the gamescreen the car will be removed from the list.
+        /// This metod also checks if the player is moving in to the walls
         /// </summary>
-        /// <param name="carList">Cars Enemies and allies</param>
+        /// <param name="carList">Cars FastEnemies and SlowEnemies</param>
         /// <param name="player">Player car</param>
         public void CheckWallCollision( ref List<Car> carList, Player player ) {
             for ( int i = 0; i < carList.Count; i++ ) {
-                // Enemies and Allies
+                // FastEnemies and SlowEnemies
                 if ( carList[i].CarPosition.X > 1000 ) {
                     carList.RemoveAt( i );
                 }
@@ -103,7 +105,7 @@ namespace slutprojekt_programmering2 {
                     carList.RemoveAt( i );
                 }
             }
-
+            // TODO Fråga Henrik
             player.MoveTop = CollidesWithTopWall( player );
             player.MoveBottom = CollidesWithBottomWall( player );
             player.MoveLeft = CollidesWithLeftWall( player );

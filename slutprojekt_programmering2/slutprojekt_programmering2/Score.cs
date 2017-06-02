@@ -8,22 +8,22 @@ namespace slutprojekt_programmering2 {
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="enemies"></param>
-        /// <param name="allies"></param>
+        /// <param name="fastEnemies"></param>
+        /// <param name="slowEnemies"></param>
         /// <param name="player"></param>
-        public void AddPoints( List<Enemy> enemies, List<Ally> allies, Player player ) {
+        public void AddPoints( List<FastEnemy> fastEnemies, List<SlowEnemy> slowEnemies, Player player ) {
             if ( player.CarPosition.X > 510 ) {
-                foreach ( Ally ally in allies ) {
-                    if ( (int) player.CarPosition.Y == (int) ally.CarPosition.Y ) {
-                        //TODO Counts every frame, need to be fixed
+                foreach ( SlowEnemy slowEnemy in slowEnemies ) {
+                    if ( (int) player.CarPosition.Y == (int) slowEnemy.CarPosition.Y ) {
+                        //TODO Counts every frame, need to be fixed TABORT
                         player.Score += 1;
                     }
                 }
             }
             else if ( player.CarPosition.X < 510 ) {
-                foreach ( Enemy enemy in enemies ) {
+                foreach ( FastEnemy enemy in fastEnemies ) {
                     if ( player.CarPosition.Y == enemy.CarPosition.Y ) {
-                        //TODO Counts every frame, need to be fixed
+                        //TODO Counts every frame, need to be fixed TABORT
                         player.Score += 2;
                     }
                 }

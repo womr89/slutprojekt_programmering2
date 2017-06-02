@@ -54,7 +54,7 @@ namespace slutprojekt_programmering2 {
         /// Car constructor
         /// </summary>
         /// <param name="startPosition">Gets the vector2 start position cordinates.</param>
-        public Car( Vector2 startPosition ) {
+        protected Car( Vector2 startPosition ) {
             StartPosition = startPosition;
             Position = startPosition;
 
@@ -74,6 +74,7 @@ namespace slutprojekt_programmering2 {
             CarRectangle = new Rectangle( (int) Position.X, (int) Position.Y, Texture.Width, Texture.Height );
             CarPosition = new Vector2( (int) Position.X, (int) Position.Y );
             Diebool = false;
+            // TODO Remove explosion
             Explosion = content.Load<Texture2D>( "explosion" );
         }
 
@@ -107,7 +108,7 @@ namespace slutprojekt_programmering2 {
                 new Vector2( 1, 1 ),
                 SpriteEffects.None,
                 0 );
-            // TODO explosion när bil crashar
+            // TODO explosion när bil crashar TABORT
             if ( Diebool ) {
                 spriteBatch.Draw( Explosion, CarPosition, Microsoft.Xna.Framework.Color.White );
             }

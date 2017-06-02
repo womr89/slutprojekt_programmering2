@@ -7,37 +7,21 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace slutprojekt_programmering2 {
-    class Ally : Car {
+    class SlowEnemy : Car {
         Random _randomCrash = new Random();
         private int _random;
         private float _rotation2;
         private bool _startRotate;
 
-        public Ally(Vector2 startPosition) : base(startPosition) {
+        public SlowEnemy(Vector2 startPosition) : base(startPosition) {
             _rotation2 = (float) Math.PI;
         }
 
         public override void Update(GameTime gameTime) {
             Position.Y += 5;
-            // TODO used when debugging collision between Ally and Enemy
+            // TODO used when debugging collision between SlowEnemy and FastEnemy
             //Position.X -= 4;
-
-            // TODO Bilarna (ALly och Enemy) ska slumpvis tappa kontroll och börja svänga ut från vägen och krasha
-            //_random = _randomCrash.Next(0, 500);
-
-            /*if (_random == 1)
-            {
-                _startRotate = true;
-            }
-            while (_startRotate)
-            {
-                _rotation2 -= (float)1;
-                if (_rotation2 == (float)Math.PI - 1)
-                {
-                    _startRotate = false;
-                }
-            }
-            */
+            
             base.Update(gameTime);
         }
 

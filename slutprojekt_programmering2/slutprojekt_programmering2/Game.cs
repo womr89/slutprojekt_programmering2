@@ -24,16 +24,16 @@ namespace slutprojekt_programmering2 {
     }
 
     public class Game : Microsoft.Xna.Framework.Game {
-        KeyboardState State;
+        KeyboardState _state;
         GraphicsDeviceManager graphics;
         SpriteBatch _spriteBatch;
         Player _player;
         double _givePointsTimer;
-        List<Enemy> _enemies = new List<Enemy>();
-        double _enemySpawnTimer = 700;
+        List<FastEnemy> _fastEnemies = new List<FastEnemy>();
+        double _fastEnemySpawnTimer = 700;
         int _randomNumber;
-        List<Ally> _allies = new List<Ally>();
-        double _allySpawnTimer = 1700;
+        List<SlowEnemy> _slowEnemies = new List<SlowEnemy>();
+        double _slowEnemySpawnTimer = 1700;
         List<Car> _allCars = new List<Car>();
         Collision _collision;
         Score _score;
@@ -47,7 +47,7 @@ namespace slutprojekt_programmering2 {
 
         // Debug
         Texture2D _debugTexture;
-
+        // TODO *******
         readonly List<Vector2> _fastEnemySpawnPos = new List<Vector2>( new Vector2[] {
             new Vector2( 90, -225 ),
             new Vector2( 120, -225 ),
@@ -79,11 +79,11 @@ namespace slutprojekt_programmering2 {
         public Game() {
             graphics = new GraphicsDeviceManager( this );
             Content.RootDirectory = "Content";
-
+            // TODO **********
             if ( ! File.Exists( @"all_cars.json" ) || ! File.Exists( @"player.json" ) ) {
                 return;
             }
-            
+            // TODO Question Box
             if (
                 MessageBox.Show(
                     "Would you like to load your previous game (yes) or start a new one (no) ?",
@@ -91,7 +91,7 @@ namespace slutprojekt_programmering2 {
                     MessageBoxButtons.YesNo
                     ) == DialogResult.Yes
                 ) {
-                _loadPreviousGame = true;
+                _loadPreviousGame = true; 
             }
             else if (
                 MessageBox.Show(
@@ -159,17 +159,17 @@ namespace slutprojekt_programmering2 {
             // Player
             _player.LoadContent( Content );
             _player.LoadDebugTexture( _debugTexture ); // Debug load texture for player
-            // Allies
-            foreach ( var car in _allies ) {
+            // SlowEnemies
+            foreach ( var car in _slowEnemies ) {
                 car.LoadContent( Content );
                 car.LoadDebugTexture( _debugTexture ); // Debug
             }
-            // Enemies
-            foreach ( var car in _enemies ) {
+            // FastEnemies
+            foreach ( var car in _fastEnemies ) {
                 car.LoadContent( Content );
                 car.LoadDebugTexture( _debugTexture ); // Debug
             }
-            State = new KeyboardState();
+            _state = new KeyboardState();
 
             _collision = new Collision();
             _score = new Score();
@@ -177,7 +177,7 @@ namespace slutprojekt_programmering2 {
             _font = Content.Load<SpriteFont>("SpriteFont1");
             _fontPos = new Vector2(
                 graphics.GraphicsDevice.Viewport.Width * 0.1f,
-                graphics.GraphicsDevice.Viewport.Height * 0.9f
+                graphics.GraphicsDevice.Viewport.Height * 0.1f
             );
             base.LoadContent();
         }
@@ -197,40 +197,40 @@ namespace slutprojekt_programmering2 {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update( GameTime gameTime ) {
             // Allows the game to exit // TODO Exit fungerar inte.
-            if ( State.IsKeyDown( XNAKeys.F ) ) {
+            if ( _state.IsKeyDown( XNAKeys.F ) ) {
                 Exit();
                 return;
             }
                 
 
-            // add new enemy on random position every x milliseconds
+            // add new FastEnemy on random position every x milliseconds
             _randomNumber = _randomSpawn.Next( _fastEnemySpawnPos.Count );
-            _enemySpawnTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            _fastEnemySpawnTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if ( _enemySpawnTimer > 700 ) {
-                Enemy enemy = new Enemy( _fastEnemySpawnPos[_randomNumber] );
+            if ( _fastEnemySpawnTimer > 700 ) {
+                FastEnemy fastEnemy = new FastEnemy( _fastEnemySpawnPos[_randomNumber] );
 
-                // Added to _enemies to use in Score.cs
-                _enemies.Add( enemy );
-                _allCars.Add( enemy );
+                // Added to _fastEnemies to use in Score.cs
+                _fastEnemies.Add( fastEnemy );
+                _allCars.Add( fastEnemy );
                 _allCars.Last().LoadContent( Content );
                 _allCars.Last().LoadDebugTexture( _debugTexture ); // Debug
-                _enemySpawnTimer -= 700;
+                _fastEnemySpawnTimer -= 700;
             }
             
-            // Add new allie on random position every x milliseconds
-            _allySpawnTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            // Add new SlowEnemy on random position every x milliseconds
+            _slowEnemySpawnTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
             _randomNumber = _randomSpawn.Next( _slowEnemySpawnPos.Count );
 
-            if ( _allySpawnTimer > 1700 ) {
-                Ally ally = new Ally( _slowEnemySpawnPos[_randomNumber] );
+            if ( _slowEnemySpawnTimer > 1700 ) {
+                SlowEnemy slowEnemy = new SlowEnemy( _slowEnemySpawnPos[_randomNumber] );
 
-                // Added to _allies to use in Score.cs
-                _allies.Add( ally );
-                _allCars.Add( ally );
+                // Added to _slowEnemies to use in Score.cs
+                _slowEnemies.Add( slowEnemy );
+                _allCars.Add( slowEnemy );
                 _allCars.Last().LoadContent( Content );
                 _allCars.Last().LoadDebugTexture( _debugTexture ); // Debug
-                _allySpawnTimer -= 1700;
+                _slowEnemySpawnTimer -= 1700;
             }
 
             foreach ( Car car in _allCars ) {
@@ -239,11 +239,11 @@ namespace slutprojekt_programmering2 {
             
             _player.Update( gameTime );
             _background.Update();
-
+            // TODO Give points
             var collisions = _collision.CheckPlayerCollision( ref _allCars, _player );
             _player.AddPoints( collisions * ( _collision.IsInLeftLane(_player) ? -8 : -2 ) );
 
-            _collision.CheckAllyEnemyCollision( ref _allCars );
+            _collision.CheckEnemiesCollision( ref _allCars );
             _collision.CheckWallCollision( ref _allCars, _player );
 
             _givePointsTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -253,7 +253,7 @@ namespace slutprojekt_programmering2 {
                 _givePointsTimer = 0;
             }
 
-            _score.AddPoints( _enemies, _allies, _player );
+            _score.AddPoints( _fastEnemies, _slowEnemies, _player );
             base.Update( gameTime );
         }
 
@@ -268,10 +268,11 @@ namespace slutprojekt_programmering2 {
             // Player
             _player.Draw( _spriteBatch );
 
-            // Draw Enemy and Ally
+            // Draw SlowEnemy and FastEnemy
             foreach ( Car car in _allCars ) {
                 car.Draw( _spriteBatch );
             }
+            // TODO *******
             string points = $"Score: {_player.GetPoints()}";
             Vector2 fontOrigin = new Vector2( 0, 0 );
             _spriteBatch.DrawString(_font, points, _fontPos, Color.Blue, 0, fontOrigin, 1.0f, SpriteEffects.None, 0.5f);
@@ -279,7 +280,7 @@ namespace slutprojekt_programmering2 {
 
             base.Draw( gameTime );
         }
-
+        // TODO ********
         protected override void OnExiting( Object sender, EventArgs args ) {
             File.WriteAllText(
                 @"all_cars.json",

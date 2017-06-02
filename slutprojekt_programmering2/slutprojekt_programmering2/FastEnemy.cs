@@ -9,21 +9,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace slutprojekt_programmering2
 {
-    class Enemy : Car
+    class FastEnemy : Car
     {  
         
         /// <summary>
         /// Setting value to SpawnPosition.Y
         /// </summary>
         /// <param name="startPosition">the entire game-screen width and height</param>
-        public Enemy(Vector2 startPosition):base (startPosition)
+        public FastEnemy(Vector2 startPosition):base (startPosition)
         {
             
-        }
-
-        public override void LoadContent(ContentManager content)
-        {
-            base.LoadContent(content);
         }
 
         /// <summary>

@@ -1,0 +1,87 @@
+[
+  {
+    "CarRectangle": {
+      "X": 603,
+      "Y": 965,
+      "Width": 125,
+      "Height": 200,
+      "Left": 603,
+      "Right": 728,
+      "Top": 965,
+      "Bottom": 1165,
+      "Location": "603, 965",
+      "Center": "665, 1065",
+      "IsEmpty": false
+    },
+    "CarPosition": "665, 1065",
+    "Diebool": false
+  },
+  {
+    "CarRectangle": {
+      "X": 798,
+      "Y": 455,
+      "Width": 125,
+      "Height": 200,
+      "Left": 798,
+      "Right": 923,
+      "Top": 455,
+      "Bottom": 655,
+      "Location": "798, 455",
+      "Center": "860, 555",
+      "IsEmpty": false
+    },
+    "CarPosition": "860, 555",
+    "Diebool": false
+  },
+  {
+    "CarRectangle": {
+      "X": 348,
+      "Y": 539,
+      "Width": 125,
+      "Height": 200,
+      "Left": 348,
+      "Right": 473,
+      "Top": 539,
+      "Bottom": 739,
+      "Location": "348, 539",
+      "Center": "410, 639",
+      "IsEmpty": false
+    },
+    "CarPosition": "410, 639",
+    "Diebool": false
+  },
+  {
+    "CarRectangle": {
+      "X": 603,
+      "Y": -55,
+      "Width": 125,
+      "Height": 200,
+      "Left": 603,
+      "Right": 728,
+      "Top": -55,
+      "Bottom": 145,
+      "Location": "603, -55",
+      "Center": "665, 45",
+      "IsEmpty": false
+    },
+    "CarPosition": "665, 45",
+    "Diebool": false
+  },
+  {
+    "CarRectangle": {
+      "X": 28,
+      "Y": 35,
+      "Width": 125,
+      "Height": 200,
+      "Left": 28,
+      "Right": 153,
+      "Top": 35,
+      "Bottom": 235,
+      "Location": "28, 35",
+      "Center": "90, 135",
+      "IsEmpty": false
+    },
+    "CarPosition": "90, 135",
+    "Diebool": false
+  }
+]
