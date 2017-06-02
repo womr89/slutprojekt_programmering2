@@ -16,8 +16,7 @@ namespace slutprojekt_programmering2
         /// Setting value to SpawnPosition.Y
         /// </summary>
         /// <param name="startPosition">the entire game-screen width and height</param>
-        public FastEnemy(Vector2 startPosition):base (startPosition)
-        {
+        public FastEnemy(Vector2 startPosition):base (startPosition) {
             
         }
 
@@ -25,10 +24,8 @@ namespace slutprojekt_programmering2
         /// Update metod, used to set SpawnPosition.X and constant speed to Position.Y
         /// </summary>
         /// <param name="gameTime">Currently not used, inherited from Game.cs Update</param>
-        public override void Update(GameTime gameTime)
-        {
-            Position.Y += 12;
-
+        public override void Update(GameTime gameTime) {
+            Position = new Vector2( Position.X, Position.Y + 12 );
             base.Update(gameTime);
         }
 

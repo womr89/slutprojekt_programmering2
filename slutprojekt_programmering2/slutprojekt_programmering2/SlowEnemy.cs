@@ -18,7 +18,7 @@ namespace slutprojekt_programmering2 {
         }
 
         public override void Update(GameTime gameTime) {
-            Position.Y += 5;
+            Position = new Vector2( Position.X, Position.Y + 5 );
             // TODO used when debugging collision between SlowEnemy and FastEnemy
             //Position.X -= 4;
             

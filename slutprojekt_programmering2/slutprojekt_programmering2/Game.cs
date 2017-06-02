@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -37,7 +37,8 @@ namespace slutprojekt_programmering2 {
         List<Car> _allCars = new List<Car>();
         Collision _collision;
         Score _score;
-        bool _loadPreviousGame;
+        private bool _loadPreviousGameFromFile;
+        private string _loadPreviousGameFromInternet;
         JsonSerializerSettings _serializerSettings = new JsonSerializerSettings() {
             ContractResolver = new XnaFriendlyResolver(),
         };
@@ -79,29 +80,27 @@ namespace slutprojekt_programmering2 {
         public Game() {
             graphics = new GraphicsDeviceManager( this );
             Content.RootDirectory = "Content";
-            // TODO **********
-            if ( ! File.Exists( @"all_cars.json" ) || ! File.Exists( @"player.json" ) ) {
-                return;
-            }
-            // TODO Question Box
-            if (
-                MessageBox.Show(
-                    "Would you like to load your previous game (yes) or start a new one (no) ?",
+            
+            if ( File.Exists(@"saved_game_data.json") && MessageBox.Show(
+                    "A previous game has been found. Would you like to load it?",
                     "Previous Game Found!",
                     MessageBoxButtons.YesNo
-                    ) == DialogResult.Yes
-                ) {
-                _loadPreviousGame = true; 
+                ) == DialogResult.Yes
+            ) {
+                _loadPreviousGameFromFile = true; 
             }
-            else if (
-                MessageBox.Show(
-                    "Would you like to remove the previous game files?",
-                    "Previous Game Files",
-                    MessageBoxButtons.YesNo
-                    ) == DialogResult.Yes
-                ) {
-                File.Delete(@"all_cars.json");
-                File.Delete(@"player.json");
+
+            var loadFromInternet = MessageBox.Show(
+                "Do you like to try to load a game from the internet?",
+                "Load From Internet?",
+                MessageBoxButtons.YesNo
+            );
+
+            if ( loadFromInternet == DialogResult.Yes ) {
+                using ( WebClient client = new WebClient() ) {
+                    _loadPreviousGameFromInternet =
+                        client.DownloadString( "http://localhost:8080/load_game" );
+                }
             }
         }
 
@@ -123,15 +122,18 @@ namespace slutprojekt_programmering2 {
 
             _background = new Background();
 
-            if ( _loadPreviousGame ) {
-                _player = JsonConvert.DeserializeObject<Player>(
-                    File.ReadAllText(@"player.json"),
-                    _serializerSettings
+            if ( _loadPreviousGameFromFile || ! String.IsNullOrEmpty( _loadPreviousGameFromInternet ) ) {
+                var gameData = JsonConvert.DeserializeObject<SaveGameData>(
+                    _loadPreviousGameFromFile ?
+                        File.ReadAllText( @"saved_game_data.json" )
+                        :
+                        _loadPreviousGameFromInternet, _serializerSettings
                 );
-                _allCars = JsonConvert.DeserializeObject<List<Car>>(
-                    File.ReadAllText(@"all_cars.json"),
-                    _serializerSettings
-                );
+
+                _player = gameData.player;
+                _allCars = new List<Car>()
+                    .Concat( gameData.fastEnemies )
+                    .Concat( gameData.slowEnemies ).ToList();
             }
             else {
                 _player = new Player(new Vector2(400, 450));
@@ -152,33 +154,24 @@ namespace slutprojekt_programmering2 {
             _debugTexture = new Texture2D( GraphicsDevice, 1, 1, false, SurfaceFormat.Color );
             _debugTexture.SetData<Color>( new Color[] {Color.White} );
 
-
             // Load images:
-            // Background
             _background.LoadContent( Content );
-            // Player
             _player.LoadContent( Content );
             _player.LoadDebugTexture( _debugTexture ); // Debug load texture for player
-            // SlowEnemies
-            foreach ( var car in _slowEnemies ) {
+            
+            foreach ( var car in _allCars ) {
                 car.LoadContent( Content );
-                car.LoadDebugTexture( _debugTexture ); // Debug
             }
-            // FastEnemies
-            foreach ( var car in _fastEnemies ) {
-                car.LoadContent( Content );
-                car.LoadDebugTexture( _debugTexture ); // Debug
-            }
-            _state = new KeyboardState();
 
+            _state = new KeyboardState();
             _collision = new Collision();
-            _score = new Score();
 
             _font = Content.Load<SpriteFont>("SpriteFont1");
             _fontPos = new Vector2(
                 graphics.GraphicsDevice.Viewport.Width * 0.1f,
                 graphics.GraphicsDevice.Viewport.Height * 0.1f
             );
+
             base.LoadContent();
         }
 
@@ -210,8 +203,6 @@ namespace slutprojekt_programmering2 {
             if ( _fastEnemySpawnTimer > 700 ) {
                 FastEnemy fastEnemy = new FastEnemy( _fastEnemySpawnPos[_randomNumber] );
 
-                // Added to _fastEnemies to use in Score.cs
-                _fastEnemies.Add( fastEnemy );
                 _allCars.Add( fastEnemy );
                 _allCars.Last().LoadContent( Content );
                 _allCars.Last().LoadDebugTexture( _debugTexture ); // Debug
@@ -225,8 +216,6 @@ namespace slutprojekt_programmering2 {
             if ( _slowEnemySpawnTimer > 1700 ) {
                 SlowEnemy slowEnemy = new SlowEnemy( _slowEnemySpawnPos[_randomNumber] );
 
-                // Added to _slowEnemies to use in Score.cs
-                _slowEnemies.Add( slowEnemy );
                 _allCars.Add( slowEnemy );
                 _allCars.Last().LoadContent( Content );
                 _allCars.Last().LoadDebugTexture( _debugTexture ); // Debug
@@ -252,8 +241,7 @@ namespace slutprojekt_programmering2 {
                 _player.AddPoints( 1 );
                 _givePointsTimer = 0;
             }
-
-            _score.AddPoints( _fastEnemies, _slowEnemies, _player );
+            
             base.Update( gameTime );
         }
 
@@ -282,14 +270,43 @@ namespace slutprojekt_programmering2 {
         }
         // TODO ********
         protected override void OnExiting( Object sender, EventArgs args ) {
-            File.WriteAllText(
-                @"all_cars.json",
-                JsonConvert.SerializeObject( _allCars, Formatting.Indented, _serializerSettings)
+            var choice = MessageBox.Show(
+                "Do you want to save to a file (yes), internet (no) or not save at all (cancel)?",
+                "Save Game?",
+                MessageBoxButtons.YesNoCancel
             );
-            File.WriteAllText(
-                @"player.json",
-                JsonConvert.SerializeObject( _player, Formatting.Indented, _serializerSettings )
-            );
+
+            
+
+            if ( choice != DialogResult.Cancel  ) {
+                var gameData = JsonConvert.SerializeObject(
+                    new SaveGameData {
+                        fastEnemies = _allCars.FindAll( car => car is FastEnemy ).Cast<FastEnemy>().ToList(),
+                        slowEnemies = _allCars.FindAll( car => car is SlowEnemy ).Cast<SlowEnemy>().ToList(),
+                        player = _player
+                    },
+                    Formatting.Indented,
+                    _serializerSettings
+                );
+
+                switch ( choice ) {
+                    case DialogResult.Yes:
+                        File.WriteAllText(
+                            @"saved_game_data.json",
+                            gameData
+                            );
+                        break;
+
+                    case DialogResult.No:
+                        using ( WebClient client = new WebClient() ) {
+                            client.Headers.Add( "Content-Type", "application/json" );
+                            client.Encoding = System.Text.Encoding.UTF8;
+                            _loadPreviousGameFromInternet =
+                                client.UploadString( "http://localhost:8080/save_game", gameData );
+                        }
+                        break;
+                }
+            }
         }
     }
 }

@@ -21,9 +21,6 @@ namespace slutprojekt_programmering2 {
                     if ( allCars[i].CarRectangle.Intersects( allCars[j].CarRectangle ) && ( i != j ) ) {
                         Car car1 = allCars[i];
                         Car car2 = allCars[j];
-
-                        car1.Die();
-                        car2.Die();
                         allCars.Remove( car1 );
                         allCars.Remove( car2 );
                     }

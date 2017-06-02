@@ -16,6 +16,8 @@ namespace slutprojekt_programmering2 {
         public bool MoveLeft;
         public bool MoveRight;
 
+        KeyboardState _state;
+
         /// <summary>
         /// 
         /// </summary>
@@ -42,24 +44,24 @@ namespace slutprojekt_programmering2 {
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update( GameTime gameTime ) {
-            State = Keyboard.GetState();
+            _state = Keyboard.GetState();
             // Keyboard input
             // Left key, car go left
-            if ( State.IsKeyDown( Keys.Left ) && MoveLeft ) {
-                Position.X -= 8;
+            if ( _state.IsKeyDown( Keys.Left ) && MoveLeft ) {
+                Position = new Vector2( Position.X - 8, Position.Y );
             }
             // Right key, car go right
-            else if ( State.IsKeyDown( Keys.Right ) && MoveRight ) {
-                Position.X += 8;
+            else if ( _state.IsKeyDown( Keys.Right ) && MoveRight ) {
+                Position = new Vector2( Position.X + 8, Position.Y );
             }
 
             // Up key, car go forward
-            if ( State.IsKeyDown( Keys.Up ) && MoveTop ) {
-                Position.Y -= 8;
+            if ( _state.IsKeyDown( Keys.Up ) && MoveTop ) {
+                Position = new Vector2( Position.X, Position.Y - 8 );
             }
             // Down key, car slowing down (going backwards)
-            else if ( State.IsKeyDown( Keys.Down ) && MoveBottom ) {
-                Position.Y += 8;
+            else if ( _state.IsKeyDown( Keys.Down ) && MoveBottom ) {
+                Position = new Vector2( Position.X, Position.Y + 8 );
             }
 
            

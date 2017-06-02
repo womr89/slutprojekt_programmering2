@@ -30,36 +30,30 @@ namespace slutprojekt_programmering2 {
         /// </summary>
         protected Texture2D Texture;
 
-        protected Texture2D Explosion;
-        protected Vector2 Position;
-        protected KeyboardState State;
-        protected Vector2 StartPosition;
-        protected Vector2 SpawnPosition;
-        protected float Rotation;
-        protected Collision Collision;
+        public Vector2 Position { get; set; }
+        public float Rotation;
 
         public Rectangle CarRectangle { get; private set; }
-
-        public Vector2 CarPosition { get; private set; }
-        public bool Diebool { get; private set; }
+        public Vector2 CarPosition { get; set; }
 
         // Debug
         protected Texture2D DebugTexture;
 
         // Random Color
-        protected CarColor Color { get; private set; }
-        protected static Random random = new Random( Guid.NewGuid().GetHashCode() );
+        public CarColor Color { get; private set; }
+        private static Random random = new Random( Guid.NewGuid().GetHashCode() );
 
         /// <summary>
         /// Car constructor
         /// </summary>
         /// <param name="startPosition">Gets the vector2 start position cordinates.</param>
         protected Car( Vector2 startPosition ) {
-            StartPosition = startPosition;
             Position = startPosition;
 
             Color = (CarColor) random.Next( 0, 5 );
         }
+
+        protected Car() {}
 
         public virtual void Initialize() {
         }
@@ -73,9 +67,6 @@ namespace slutprojekt_programmering2 {
             Texture = content.Load<Texture2D>( $"_car{Color}" );
             CarRectangle = new Rectangle( (int) Position.X, (int) Position.Y, Texture.Width, Texture.Height );
             CarPosition = new Vector2( (int) Position.X, (int) Position.Y );
-            Diebool = false;
-            // TODO Remove explosion
-            Explosion = content.Load<Texture2D>( "explosion" );
         }
 
         // Used when debugging
@@ -87,10 +78,6 @@ namespace slutprojekt_programmering2 {
             CarRectangle = new Rectangle( (int) Position.X - Texture.Width / 2, (int) Position.Y - Texture.Height / 2,
                 Texture.Width, Texture.Height );
             CarPosition = new Vector2( (int) Position.X, (int) Position.Y );
-        }
-
-        public void Die() {
-            Diebool = true;
         }
 
         /// <summary>
@@ -108,10 +95,6 @@ namespace slutprojekt_programmering2 {
                 new Vector2( 1, 1 ),
                 SpriteEffects.None,
                 0 );
-            // TODO explosion när bil crashar TABORT
-            if ( Diebool ) {
-                spriteBatch.Draw( Explosion, CarPosition, Microsoft.Xna.Framework.Color.White );
-            }
 
             // Draw debugg Rectangle
             //spriteBatch.Draw(DebugTexture , CarRectangle, Microsoft.Xna.Framework.Color.White);
