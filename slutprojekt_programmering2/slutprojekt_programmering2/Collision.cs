@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace slutprojekt_programmering2 {
     class Collision {
-        // TODO Behöver nog inte denna collision
         /// <summary>
         /// Checks if all cars intercets with each other
         /// Then removes both cars if intersected
@@ -30,8 +29,9 @@ namespace slutprojekt_programmering2 {
 
         /// <summary>
         /// Checks if player intersects with all other cars
+        /// Returns how many times player interceted with _carList
         /// </summary>
-        /// <param name="carList">List of all cars</param>
+        /// <param name="carList">Reference of all cars</param>
         /// <param name="player">Player car</param>
         public int CheckPlayerCollision( ref List<Car> carList, Player player ) {
             int collisions = 0;
@@ -50,34 +50,18 @@ namespace slutprojekt_programmering2 {
             return player.CarPosition.X < 510;
         }
 
-        /// <summary>
-        /// Checks if Player collides with top wall.
-        /// </summary>
-        /// <param name="player">Player car</param>
         private bool CollidesWithTopWall( Player player ) {
             return player.CarPosition.Y >= 100;
         }
 
-        /// <summary>
-        /// Checks if Player collides with bottom wall.
-        /// </summary>
-        /// <param name="player">Player car</param>
         private bool CollidesWithBottomWall( Player player ) {
             return player.CarPosition.Y <= 890;
         }
 
-        /// <summary>
-        /// Checks if Player collides with left wall.
-        /// </summary>
-        /// <param name="player">Player car</param>
         private bool CollidesWithLeftWall( Player player ) {
             return player.CarPosition.X >= 70;
         }
 
-        /// <summary>
-        /// Checks if Player collides with right wall.
-        /// </summary>
-        /// <param name="player">Player car</param>
         private bool CollidesWithRightWall( Player player ) {
             return player.CarPosition.X <= 935;
         }
@@ -87,11 +71,11 @@ namespace slutprojekt_programmering2 {
         /// if the car has moved outside the sidewall or below the gamescreen the car will be removed from the list.
         /// This metod also checks if the player is moving in to the walls
         /// </summary>
-        /// <param name="carList">Cars FastEnemies and SlowEnemies</param>
+        /// <param name="carList">Reference of carList: FastEnemies and SlowEnemies</param>
         /// <param name="player">Player car</param>
         public void CheckWallCollision( ref List<Car> carList, Player player ) {
             for ( int i = 0; i < carList.Count; i++ ) {
-                // FastEnemies and SlowEnemies
+
                 if ( carList[i].CarPosition.X > 1000 ) {
                     carList.RemoveAt( i );
                 }
@@ -102,7 +86,7 @@ namespace slutprojekt_programmering2 {
                     carList.RemoveAt( i );
                 }
             }
-            // TODO Fråga Henrik
+            
             player.MoveTop = CollidesWithTopWall( player );
             player.MoveBottom = CollidesWithBottomWall( player );
             player.MoveLeft = CollidesWithLeftWall( player );

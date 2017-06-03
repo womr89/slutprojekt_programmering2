@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 namespace slutprojekt_programmering2 {
     /// <summary>
     /// https://www.dotnetperls.com/enum
-    /// lets me set a string to a number
+    /// Lets me set a string to a number
     /// </summary>
     public enum CarColor {
         Blue,
@@ -44,7 +44,7 @@ namespace slutprojekt_programmering2 {
         private static Random random = new Random( Guid.NewGuid().GetHashCode() );
 
         /// <summary>
-        /// Car constructor
+        /// Set a random color
         /// </summary>
         /// <param name="startPosition">Gets the vector2 start position cordinates.</param>
         protected Car( Vector2 startPosition ) {
@@ -52,11 +52,8 @@ namespace slutprojekt_programmering2 {
 
             Color = (CarColor) random.Next( 0, 5 );
         }
-
+        
         protected Car() {}
-
-        public virtual void Initialize() {
-        }
 
         /// <summary>
         /// Loads texture with random car-Color. $"_car{Color}" is instead of typing: "_carBlue, _carGreen, ... ect".
@@ -69,11 +66,17 @@ namespace slutprojekt_programmering2 {
             CarPosition = new Vector2( (int) Position.X, (int) Position.Y );
         }
 
-        // Used when debugging
+        /// <summary>
+        /// Only used for debug
+        /// </summary>
+        /// <param name="debugTexture"></param>
         public void LoadDebugTexture( Texture2D debugTexture ) {
             DebugTexture = debugTexture;
         }
-
+        /// <summary>
+        /// Calculate centre of Car Sprite
+        /// </summary>
+        /// <param name="gameTime"></param>
         public virtual void Update( GameTime gameTime ) {
             CarRectangle = new Rectangle( (int) Position.X - Texture.Width / 2, (int) Position.Y - Texture.Height / 2,
                 Texture.Width, Texture.Height );

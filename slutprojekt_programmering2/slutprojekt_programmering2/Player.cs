@@ -18,21 +18,23 @@ namespace slutprojekt_programmering2 {
 
         KeyboardState _state;
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="startPosition">the entire game-screen width and height</param>
         public Player( Vector2 startPosition ) : base( startPosition ) {
         }
-
+        /// <summary>
+        /// Loads a texture with the Color Blue
+        /// </summary>
+        /// <param name="content">ContentManager</param>
         public override void LoadContent( ContentManager content ) {
             Texture = content.Load<Texture2D>( "_carBlue" );
         }
-
+        
         public int GetPoints() {
             return Score;
         }
+        
 
+        /// <param name="points">Amount of points added</param>
         public void AddPoints( int points ) {
             Score += points;
         }
@@ -67,7 +69,10 @@ namespace slutprojekt_programmering2 {
            
             base.Update( gameTime );
         }
-
+        /// <summary>
+        /// Sets rotation, then calls for base Draw in Car
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw( SpriteBatch spriteBatch ) {
             Rotation = (float) Math.PI;
             base.Draw( spriteBatch );

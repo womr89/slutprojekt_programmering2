@@ -11,24 +11,23 @@ namespace slutprojekt_programmering2
 {
     class FastEnemy : Car
     {  
-        
-        /// <summary>
-        /// Setting value to SpawnPosition.Y
-        /// </summary>
         /// <param name="startPosition">the entire game-screen width and height</param>
         public FastEnemy(Vector2 startPosition):base (startPosition) {
             
         }
 
         /// <summary>
-        /// Update metod, used to set SpawnPosition.X and constant speed to Position.Y
+        /// Position.Y += 12
         /// </summary>
-        /// <param name="gameTime">Currently not used, inherited from Game.cs Update</param>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime) {
             Position = new Vector2( Position.X, Position.Y + 12 );
             base.Update(gameTime);
         }
-
+        /// <summary>
+        /// Sets rotation, then calls for base Draw in Car
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch)
         {
             Rotation = 0;

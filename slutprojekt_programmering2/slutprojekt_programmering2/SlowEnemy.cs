@@ -8,26 +8,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace slutprojekt_programmering2 {
     class SlowEnemy : Car {
-        Random _randomCrash = new Random();
-        private int _random;
-        private float _rotation2;
-        private bool _startRotate;
-
         public SlowEnemy(Vector2 startPosition) : base(startPosition) {
-            _rotation2 = (float) Math.PI;
         }
-
+        /// <summary>
+        /// Position.Y += 5
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime) {
             Position = new Vector2( Position.X, Position.Y + 5 );
-            // TODO used when debugging collision between SlowEnemy and FastEnemy
-            //Position.X -= 4;
-            
             base.Update(gameTime);
         }
-
+        /// <summary>
+        /// Sets rotation, then calls for base Draw in Car
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public override void Draw(SpriteBatch spriteBatch) {
-            Rotation = _rotation2;
-
+            Rotation = (float)Math.PI;
             base.Draw(spriteBatch);
         }
     }
